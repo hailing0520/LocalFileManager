@@ -1,0 +1,38 @@
+Function Call 和 MCP有什么区别？Function Call 是大模型自带的能力吗？
+
+区别先说结论
+Function Call：是“大模型输出一种结构化调用意图”的能力（类似：我要调用 move_file，参数是...）。
+MCP：是“让模型/Agent用统一协议去访问外部工具和资源”的标准。
+所以：
+
+Function Call 偏“调用动作格式”
+MCP 偏“工具接入与通信规范”
+Function Call 是不是大模型自带能力？
+是，但要分层理解：
+
+大模型“自带”的是：
+生成结构化调用请求（工具名 + 参数）的能力。
+大模型“不自带”的是：
+真实执行这个调用的后端系统（比如文件系统、数据库、浏览器）。
+也就是说，模型可以说“请调用 move_file(a,b)”，
+但真正去动文件，需要你的程序/MCP/工具执行器来完成。
+
+你项目里的映射
+在你当前项目中：
+
+Agent 负责决策“该不该调用动作”
+mcp.py 的 LocalFileSystemMCP 负责承接并路由（MCP角色）
+_move_file/_delete_file 这些是具体 Function（现在是占位打印）
+目前是“教学版”：
+
+有调用链
+有 Function Call 语义
+无真实落盘执行（故意安全设计）
+一句话记忆
+Function Call：模型说“我要调用这个函数”
+MCP：系统规定“函数怎么被发现、怎么被调用、怎么返回结果”
+如果你愿意，我下一步可以把你项目改成“半真实版”：
+
+保留 dry-run
+但在你确认后，create_folder/move_file 变成真实执行
+这样你会更直观看到 “Function Call 请求” 到 “MCP 执行” 的完整闭环。
