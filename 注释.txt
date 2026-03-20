@@ -1,0 +1,22 @@
+这一版没有使用 LangChain 的函数/类，而是我为教学目的做的纯 Python 架构模拟。
+
+你现在项目里的方法分两类：
+
+真实可运行（Python层面）
+如 Path.iterdir()、Path.exists()、input()、数据类、流程编排等
+这些都是真实可执行的，程序能跑通完整链路
+故意占位（执行层）
+在 mcp.py 里的 create_folder / move_file / rename_file / delete_file
+目前只打印 [Function Call Placeholder] ...，不会真实改文件
+所以结论是：
+
+架构流程是“真实可运行”的；
+文件操作是“可替换的占位实现”；
+目前不是 LangChain 版本。
+如果你要对齐 LangChain，一般对应关系是：
+
+Agent -> LangChain AgentExecutor / 自定义 agent loop
+SubAgent -> 多 Agent 协作（可用 LangGraph 节点更清晰）
+Skill -> prompt 模板 / 规则函数 / tool 描述
+MCP -> 工具适配层（你也可接 MCP server）
+Function Call -> @tool 或结构化 tool 调用
